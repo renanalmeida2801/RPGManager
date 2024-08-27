@@ -44,11 +44,13 @@ public class PersonagemController {
         return esperado;
     }
 
-    public void editarPersonagem(int id) {
+    public void editarPersonagem(int id, String nome, String raca, String classe, String sexo, int nivel,
+            List<String> habilidades) {
 
+        personagemDAO.atualizarPersonagem(id, nome, raca, classe, sexo, nivel, habilidades);
     }
 
-    public void gerarRelatorio() {
+    public void gerarRelatorio(int id) {
 
     }
 }
