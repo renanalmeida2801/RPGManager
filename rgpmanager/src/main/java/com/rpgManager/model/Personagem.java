@@ -60,7 +60,7 @@ public class Personagem {
     }
 
     public void setHabilidade(List<String> novaHabilidades) {
-        this.habilidades = habilidades;
+        this.habilidades = novaHabilidades;
     }
 
     public List<String> getHabilidades() {
