@@ -11,10 +11,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.StringJoiner;
-import com.rpgManager.interfaces.IBancoDeDados;
+import com.rpgManager.interfaces.IPersonagemDAO;
 import com.rpgManager.model.Personagem;
 
-public class BancoDeDados implements IBancoDeDados {
+public class PersonagemDAOImpl implements IPersonagemDAO {
 
     public static final String url = "jdbc:postgresql://localhost:5434/RPGSheet";
     public static final String user = "postgres";

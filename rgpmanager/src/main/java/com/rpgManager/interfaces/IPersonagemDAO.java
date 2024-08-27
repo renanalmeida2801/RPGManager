@@ -2,7 +2,7 @@ package com.rpgManager.interfaces;
 
 import com.rpgManager.model.Personagem;
 
-public interface IBancoDeDados {
+public interface IPersonagemDAO {
 
     public void salvarPersonagem(Personagem persona);
 

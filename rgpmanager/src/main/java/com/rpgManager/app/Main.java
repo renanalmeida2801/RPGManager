@@ -2,12 +2,12 @@ package com.rpgManager.app;
 
 import java.util.List;
 
-import com.rpgManager.database.BancoDeDados;
+import com.rpgManager.database.PersonagemDAOImpl;
 import com.rpgManager.model.Personagem;
 
 public class Main {
     public static void main(String[] args) {
-        BancoDeDados banco = new BancoDeDados();
+        PersonagemDAOImpl banco = new PersonagemDAOImpl();
 
         String nome = "TCK The dirty";
         String raca = "O SUJO";
