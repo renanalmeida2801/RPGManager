@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.rpgManager.controller.PersonagemController;
+
 public class PersonagemView {
 
-    // private PersonagemController controller;
+    private PersonagemController controller;
     Scanner scanner = new Scanner(System.in);
 
     public PersonagemView() {
-        // this.controller = new PersonagemController();
+        this.controller = new PersonagemController();
     }
 
     public void mostrarMenu() {
@@ -33,10 +35,10 @@ public class PersonagemView {
                     criarPersonagem();
                     break;
                 case 2:
-                    // editarPersonagem();
+                    editarPersonagem();
                     break;
                 case 3:
-                    // excluirPersonagem();
+                    excluirPersonagem();
                     break;
                 case 4:
                     // listarPersonagem();
@@ -73,10 +75,11 @@ public class PersonagemView {
         System.out.print("Digite a classe do seu personagem:");
         String classe = scanner.nextLine();
 
+        String sexo = "";
         do {
             System.out.println("Digite o sexo do seu personagem:");
             System.out.println("M: Masculino\nF: Feminino ");
-            String sexo = scanner.nextLine();
+            sexo = scanner.nextLine();
             resposta = sexo;
             if (!(sexo.equals("M")) && !(sexo.equals("F"))) {
                 System.out.println("Sexo inválido, tente novamente!");
@@ -92,7 +95,7 @@ public class PersonagemView {
             resposta = scanner.nextLine();
             habilidades.add(id++, resposta);
         } while (!resposta.equals("0"));
-        // controller.criarPersonagem(nome, raca, classe, sexo, nivel, habilidades);
+        controller.criarPersonagem(nome, raca, classe, sexo, nivel, habilidades);
         System.out.println("Personagem Criado com Sucesso!");
     }
 

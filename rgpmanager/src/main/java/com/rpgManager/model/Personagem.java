@@ -6,7 +6,7 @@ public class Personagem {
     private String nome;
     private String raca;
     private String classe;
-    private char sexo;
+    private String sexo;
     private int nivel;
     private List<String> habilidades;
 
@@ -14,7 +14,7 @@ public class Personagem {
 
     }
 
-    public Personagem(String nome, String raca, String classe, char sexo, int nivel, List<String> habilidades) {
+    public Personagem(String nome, String raca, String classe, String sexo, int nivel, List<String> habilidades) {
         this.nome = nome;
         this.raca = raca;
         this.classe = classe;
@@ -47,11 +47,11 @@ public class Personagem {
         return this.classe;
     }
 
-    public void setSexo(char novoSexo) {
+    public void setSexo(String novoSexo) {
         this.sexo = novoSexo;
     }
 
-    public char getSexo() {
+    public String getSexo() {
         return this.sexo;
     }
 
@@ -71,7 +71,7 @@ public class Personagem {
         return this.habilidades;
     }
 
-    public void editarPersonagem(String nome, String raca, String classe, char sexo, int nivel,
+    public void editarPersonagem(String nome, String raca, String classe, String sexo, int nivel,
             List<String> habilidades) {
         setNome(nome);
         setRaca(raca);
