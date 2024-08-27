@@ -15,7 +15,7 @@ public class PersonagemController {
         this.personagemDAO = new PersonagemDAOImpl();
     }
 
-    public void criarPersonagem(String nome, String raca, String classe, char sexo, int nivel,
+    public void criarPersonagem(String nome, String raca, String classe, String sexo, int nivel,
             List<String> habilidades) {
         Personagem personagem = new Personagem();
         personagem.setNome(nome);

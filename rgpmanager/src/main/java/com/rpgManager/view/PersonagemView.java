@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.rpgManager.controller.PersonagemController;
+import com.rpgManager.model.Personagem;
+
 public class PersonagemView {
 
-    // private PersonagemController controller;
+    private PersonagemController controller;
     Scanner scanner = new Scanner(System.in);
 
     public PersonagemView() {
-        // this.controller = new PersonagemController();
+        this.controller = new PersonagemController();
     }
 
     public void mostrarMenu() {
@@ -33,16 +36,16 @@ public class PersonagemView {
                     criarPersonagem();
                     break;
                 case 2:
-                    // editarPersonagem();
+                    editarPersonagem();
                     break;
                 case 3:
-                    // excluirPersonagem();
+                    excluirPersonagem();
                     break;
                 case 4:
-                    // listarPersonagem();
+                    listarPersonagem();
                     break;
                 case 5:
-                    // gerarRelatorio();
+                    gerarRelatorio();
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -58,10 +61,11 @@ public class PersonagemView {
 
     public void criarPersonagem() {
         String resposta = "";
+        String sexo = "";
         List<String> habilidades = new ArrayList<String>() {
 
         };
-        int id = 0;
+        int idHabilidade = 0;
 
         System.out.println("CRIAÇÃO DE PERSONAGEM");
         System.out.print("Digite o nome do seu personagem:");
@@ -76,7 +80,7 @@ public class PersonagemView {
         do {
             System.out.println("Digite o sexo do seu personagem:");
             System.out.println("M: Masculino\nF: Feminino ");
-            String sexo = scanner.nextLine();
+            sexo = scanner.nextLine();
             resposta = sexo;
             if (!(sexo.equals("M")) && !(sexo.equals("F"))) {
                 System.out.println("Sexo inválido, tente novamente!");
@@ -90,28 +94,44 @@ public class PersonagemView {
         do {
             System.out.println("Digite as habilidades do seu personagem: (digite 0 para finalizar)");
             resposta = scanner.nextLine();
-            habilidades.add(id++, resposta);
+            habilidades.add(idHabilidade++, resposta);
         } while (!resposta.equals("0"));
-        // controller.criarPersonagem(nome, raca, classe, sexo, nivel, habilidades);
+        controller.criarPersonagem(nome, raca, classe, sexo, nivel, habilidades);
         System.out.println("Personagem Criado com Sucesso!");
     }
 
     public void editarPersonagem() {
-
+        System.out.print("Digite o ID do personagem que deseja editar:");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        controller.editarPersonagem(id);
     }
 
     public void excluirPersonagem() {
         System.out.print("Digite o ID do personagem que deseja excluir:");
         int id = scanner.nextInt();
         scanner.nextLine();
-        // controller.excluirPersonagem(id);
+        controller.excluirPersonagem(id);
     }
 
     public void listarPersonagem() {
+        System.out.print("Digite o ID do personagem que deseja encontrar:");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        Personagem persona = controller.buscarPersonagem(id);
+        System.out.println("Nome: " + persona.getNome());
+        System.out.println("Raça: " + persona.getRaca());
+        System.out.println("Classe: " + persona.getClasse());
+        System.out.println("Sexo: " + persona.getSexo());
+        System.out.println("Nivel: " + persona.getNivel());
+        System.out.println("Habilidades: " + persona.getHabilidades());
 
     }
 
     public void gerarRelatorio() {
-
+        System.out.print("Digite o ID do personagem que deseja emitir o relatório: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        controller.gerarRelatorio(id);
     }
 }
