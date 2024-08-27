@@ -76,7 +76,7 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
                 String nome = response.getString("nome");
                 String raca = response.getString("raca");
                 String classe = response.getString("classe");
-                char sexo = response.getString("sexo").charAt(0);
+                String sexo = response.getString("sexo");
                 int nivel = response.getInt("nivel");
                 String habilidadesString = response.getString("habilidades");
                 List<String> habilidades = List.of(habilidadesString.split(","));
