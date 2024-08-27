@@ -11,11 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.StringJoiner;
-import com.rpgManager.interfaces.IBancoDeDados;
+import com.rpgManager.interfaces.IPersonagemDAO;
 import com.rpgManager.model.Personagem;
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class BancoDeDados implements IBancoDeDados {
+public class PersonagemDAOImpl implements IPersonagemDAO {
 
     Dotenv dotenv = Dotenv.load();
 
