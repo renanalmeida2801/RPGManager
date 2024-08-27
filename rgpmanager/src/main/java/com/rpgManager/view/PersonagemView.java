@@ -101,10 +101,38 @@ public class PersonagemView {
     }
 
     public void editarPersonagem() {
+        int idHabilidade = 0;
+        String nome;
+        String raca;
+        String classe;
+        String sexo;
+        int nivel;
+        List<String> habilidades = new ArrayList<String>();
+
         System.out.print("Digite o ID do personagem que deseja editar:");
         int id = scanner.nextInt();
         scanner.nextLine();
-        controller.editarPersonagem(id);
+
+        System.out.print("Digite o novo Nome de seu Personagem:");
+        nome = scanner.nextLine();
+
+        System.out.print("Digite a nova Raça de seu Personagem:");
+        raca = scanner.nextLine();
+
+        System.out.print("Digite a nova Classe de seu Personagem:");
+        classe = scanner.nextLine();
+
+        System.out.print("Digite o novo Sexo de seu Personagem:");
+        sexo = scanner.nextLine();
+
+        System.out.print("Digite o novo Nivel de seu Personagem:");
+        nivel = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Digite as novas habilidades de seu Personagem:");
+        habilidades.add(idHabilidade++, scanner.nextLine());
+        nome = scanner.nextLine();
+        controller.editarPersonagem(id, nome, raca, classe, sexo, nivel, habilidades);
     }
 
     public void excluirPersonagem() {
