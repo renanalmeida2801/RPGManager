@@ -13,12 +13,15 @@ import java.util.Scanner;
 import java.util.StringJoiner;
 import com.rpgManager.interfaces.IBancoDeDados;
 import com.rpgManager.model.Personagem;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class BancoDeDados implements IBancoDeDados {
 
-    public static final String url = "jdbc:postgresql://localhost:5434/RPGSheet";
-    public static final String user = "postgres";
-    public static final String password = "9298";
+    Dotenv dotenv = Dotenv.load();
+
+    private final String url = dotenv.get("URL");
+    private final String user = dotenv.get("USER");
+    private final String password = dotenv.get("PASSWORD");
 
     // Método para obter a conexão com o banco de dados
     private Connection getConnection() throws SQLException {
