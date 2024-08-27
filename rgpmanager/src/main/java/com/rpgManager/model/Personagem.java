@@ -10,6 +10,10 @@ public class Personagem {
     private int nivel;
     private List<String> habilidades;
 
+    public Personagem() {
+
+    }
+
     public Personagem(String nome, String raca, String classe, char sexo, int nivel, List<String> habilidades) {
         this.nome = nome;
         this.raca = raca;
