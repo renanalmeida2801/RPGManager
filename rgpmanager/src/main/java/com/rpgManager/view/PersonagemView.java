@@ -114,6 +114,7 @@ public class PersonagemView {
         List<String> habilidades = new ArrayList<String>();
         boolean mudanca = true;
 
+        listarPersonagens();
         System.out.print("Digite o ID do personagem que deseja editar:");
         int id = scanner.nextInt();
         scanner.nextLine();
@@ -162,6 +163,7 @@ public class PersonagemView {
                     break;
                 case 0:
                     mudanca = false;
+                    limparTela();
                     System.out.println("Saindo...");
                     break;
                 default:
@@ -200,9 +202,14 @@ public class PersonagemView {
 
     public void excluirPersonagem() {
         listarPersonagens();
-        System.out.print("Digite o ID do personagem que deseja excluir:");
+        System.out.println("Digite o ID do personagem que deseja excluir --- (digite 0 para Cancelar)");
         int id = scanner.nextInt();
         scanner.nextLine();
+        if (id == 0) {
+            limparTela();
+            System.out.println("Operação cancelada!");
+            return;
+        }
         System.out.println("Tem certeza que deseja deletar este personagem? S/N");
         String confirmacao = scanner.nextLine();
         if (confirmacao.equals("S")) {
@@ -210,9 +217,12 @@ public class PersonagemView {
             limparTela();
             System.out.println("Personagem Excluido com sucesso!");
         } else if (confirmacao.equals("N")) {
+            limparTela();
             System.out.println("Operação cancelada!");
-        } else
+        } else {
+            limparTela();
             System.out.println("ERRO na exclusão. Tente novamente");
+        }
     }
 
     public void listarPersonagens() {
