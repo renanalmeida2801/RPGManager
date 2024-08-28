@@ -1,6 +1,7 @@
 package com.rpgManager.interfaces;
 
 import com.rpgManager.model.Personagem;
+import java.util.*;
 
 public interface IPersonagemDAO {
 
@@ -12,6 +13,6 @@ public interface IPersonagemDAO {
 
     public void deletarPersonagem(int id);
 
-    public void listarTodosPersonagens();
+    public List<Personagem> listarTodosPersonagens();
 
 }
