@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.StringJoiner;
+
 import com.rpgManager.interfaces.IPersonagemDAO;
 import com.rpgManager.model.Personagem;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -37,6 +38,8 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
     private final String url = dotenv.get("URL");
     private final String user = dotenv.get("USER");
     private final String password = dotenv.get("PASSWORD");
+
+    Personagem personagem;
 
     // Método para obter a conexão com o banco de dados
     private Connection getConnection() throws SQLException {
@@ -70,7 +73,6 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
             statement.setString(6, habilidadesString);
 
             statement.executeUpdate();
-            System.out.println("personagem: " + persona.getNome() + " foi adicionado");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -206,7 +208,6 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
                 PreparedStatement statement = conexao.prepareStatement(deleteThis)) {
             statement.setInt(1, id);
             statement.executeUpdate();
-            System.out.println("O personagem " + nome + " foi deletado com sucesso!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -214,7 +215,8 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
     }
 
     @Override
-    public void listarTodosPersonagens() {
+    public List<Personagem> listarTodosPersonagens() {
+        List<Personagem> personagens = new ArrayList<>();
         try (Connection conn = getConnection();
                 Statement stmt = conn.createStatement()) {
 
@@ -222,17 +224,23 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
             ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
-                System.out.println("ID: " + rs.getInt("id"));
-                System.out.println("Nome: " + rs.getString("nome"));
-                System.out.println("Raça: " + rs.getString("raca"));
-                System.out.println("Classe: " + rs.getString("classe"));
-                System.out.println("Sexo: " + rs.getString("sexo"));
-                System.out.println("Nível: " + rs.getInt("nivel"));
-                System.out.println("Habilidades: " + rs.getString("habilidades"));
-                System.out.println("----------");
+                personagem = new Personagem();
+                personagem.setId(rs.getInt("id"));
+                personagem.setNome(rs.getString("nome"));
+                personagem.setRaca(rs.getString("raca"));
+                personagem.setClasse(rs.getString("classe"));
+                personagem.setSexo(rs.getString("sexo"));
+                personagem.setNivel(rs.getInt("nivel"));
+                String habildiadesString = rs.getString("habilidades");
+                List<String> habilidades = Arrays.asList(habildiadesString.split(","));
+                personagem.setHabilidade(habilidades);
+
+                personagens.add(personagem);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return personagens;
     }
 }

@@ -24,7 +24,7 @@ public class PersonagemView {
             System.out.println("O que você deseja realizar ? Digite o número correspondente!");
             System.out.println("------------------------------------------------------------");
             System.out.println(
-                    "(1): Criar Personagem \n(2): Editar Personagem\n(3): Excluir Personagem\n(4): Listar Personagem\n(5): Gerar relatório\n(0): Sair");
+                    "(1): Criar Personagem \n(2): Editar Personagem\n(3): Excluir Personagem\n(4): Listar Personagens\n(5): Gerar relatório\n(0): Sair");
             System.out.println("------------------------------------------------------------");
             System.out.print("digite um número:");
 
@@ -42,7 +42,7 @@ public class PersonagemView {
                     excluirPersonagem();
                     break;
                 case 4:
-                    listarPersonagem();
+                    listarPersonagens();
                     break;
                 case 5:
                     gerarRelatorio();
@@ -94,9 +94,12 @@ public class PersonagemView {
         do {
             System.out.println("Digite as habilidades do seu personagem: (digite 0 para finalizar)");
             resposta = scanner.nextLine();
-            habilidades.add(idHabilidade++, resposta);
+            if (!resposta.equals("0")) {
+                habilidades.add(idHabilidade++, resposta);
+            }
         } while (!resposta.equals("0"));
         controller.criarPersonagem(nome, raca, classe, sexo, nivel, habilidades);
+        limparTela();
         System.out.println("Personagem Criado com Sucesso!");
     }
 
@@ -196,24 +199,36 @@ public class PersonagemView {
     }
 
     public void excluirPersonagem() {
+        listarPersonagens();
         System.out.print("Digite o ID do personagem que deseja excluir:");
         int id = scanner.nextInt();
         scanner.nextLine();
-        controller.excluirPersonagem(id);
+        System.out.println("Tem certeza que deseja deletar este personagem? S/N");
+        String confirmacao = scanner.nextLine();
+        if (confirmacao.equals("S")) {
+            controller.excluirPersonagem(id);
+            limparTela();
+            System.out.println("Personagem Excluido com sucesso!");
+        } else if (confirmacao.equals("N")) {
+            System.out.println("Operação cancelada!");
+        } else
+            System.out.println("ERRO na exclusão. Tente novamente");
     }
 
-    public void listarPersonagem() {
-        System.out.print("Digite o ID do personagem que deseja encontrar:");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-        Personagem persona = controller.buscarPersonagem(id);
-        System.out.println("Nome: " + persona.getNome());
-        System.out.println("Raça: " + persona.getRaca());
-        System.out.println("Classe: " + persona.getClasse());
-        System.out.println("Sexo: " + persona.getSexo());
-        System.out.println("Nivel: " + persona.getNivel());
-        System.out.println("Habilidades: " + persona.getHabilidades());
+    public void listarPersonagens() {
+        List<Personagem> personagens = controller.listarPersonagens();
 
+        for (Personagem p : personagens) {
+            System.out.println("ID: " + p.getId());
+            System.out.println("Nome: " + p.getNome());
+            System.out.println("Raça: " + p.getRaca());
+            System.out.println("Classe: " + p.getClasse());
+            System.out.println("Sexo: " + p.getSexo());
+            System.out.println("Nível: " + p.getNivel());
+            System.out.println("Habilidades: " + p.getHabilidades());
+            System.out.println("--------------------------------");
+
+        }
     }
 
     public void gerarRelatorio() {
@@ -222,4 +237,17 @@ public class PersonagemView {
         scanner.nextLine();
         controller.gerarRelatorio(id);
     }
+
+    public static void limparTela() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                new ProcessBuilder("clear").inheritIO().start().waitFor();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
