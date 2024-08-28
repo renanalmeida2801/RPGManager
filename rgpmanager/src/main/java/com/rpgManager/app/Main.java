@@ -1,16 +1,26 @@
 package com.rpgManager.app;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.management.relation.Relation;
 
 import com.rpgManager.database.PersonagemDAOImpl;
 import com.rpgManager.model.Personagem;
+import com.rpgManager.model.Relatorio;
 import com.rpgManager.view.PersonagemView;
 
 public class Main {
     public static void main(String[] args) {
 
-        PersonagemView persona = new PersonagemView();
-        persona.mostrarMenu();
+        // PersonagemView persona = new PersonagemView();
+        // persona.mostrarMenu();
+
+        Relatorio relatorio = new Relatorio();
+
+        ArrayList<String> lista = new ArrayList<>();
+
+        relatorio.gerarRelatorio(new Personagem("Kratos", "Humano", "Guerreiro", "sim", 20, lista));
         // PersonagemDAOImpl banco = new PersonagemDAOImpl();
 
         // String nome = "TCK The dirty";

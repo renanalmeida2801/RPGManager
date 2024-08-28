@@ -23,6 +23,7 @@ public class Personagem {
         this.habilidades = habilidades;
     }
 
+
     public void setNome(String novoNome) {
         this.nome = novoNome;
     }

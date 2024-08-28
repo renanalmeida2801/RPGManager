@@ -139,6 +139,9 @@ public class PersonagemView {
         System.out.print("Digite o ID do personagem que deseja excluir:");
         int id = scanner.nextInt();
         scanner.nextLine();
+        controller.buscarPersonagem(id);
+
+        
         controller.excluirPersonagem(id);
     }
 
