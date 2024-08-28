@@ -1,5 +1,6 @@
 package com.rpgManager.app;
 
+import java.nio.file.Paths;
 import java.util.List;
 
 import com.rpgManager.database.PersonagemDAOImpl;
@@ -9,8 +10,11 @@ import com.rpgManager.view.PersonagemView;
 public class Main {
     public static void main(String[] args) {
 
+        System.out.println(Paths.get("").toAbsolutePath().toString());
         PersonagemView persona = new PersonagemView();
+
         persona.mostrarMenu();
+
         // PersonagemDAOImpl banco = new PersonagemDAOImpl();
 
         // String nome = "TCK The dirty";

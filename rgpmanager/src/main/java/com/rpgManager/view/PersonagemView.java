@@ -102,36 +102,96 @@ public class PersonagemView {
 
     public void editarPersonagem() {
         int idHabilidade = 0;
-        String nome;
-        String raca;
-        String classe;
-        String sexo;
-        int nivel;
+        String habilidade;
+        String nome = "";
+        String raca = "";
+        String classe = "";
+        String sexo = "";
+        int nivel = -1;
         List<String> habilidades = new ArrayList<String>();
+        boolean mudanca = true;
 
         System.out.print("Digite o ID do personagem que deseja editar:");
         int id = scanner.nextInt();
         scanner.nextLine();
+        do {
+            System.out.println("O que você deseja Editar ? Digite o número correspondente!");
+            System.out.println("------------------------------------------------------------");
+            System.out.println(
+                    "(1): Nome do Personagem \n(2): Raca do Personagem\n(3): Classe do Personagem\n(4): Sexo do Personagem\n(5): Nivel do Personagem\n(6): Habilidades do Personagem\n(0): Terminar edicao");
+            System.out.println("------------------------------------------------------------");
+            System.out.print("digite um número:");
 
-        System.out.print("Digite o novo Nome de seu Personagem:");
-        nome = scanner.nextLine();
+            int opcao = scanner.nextInt();
+            scanner.nextLine();
 
-        System.out.print("Digite a nova Raça de seu Personagem:");
-        raca = scanner.nextLine();
+            switch (opcao) {
+                case 1:
+                    System.out.print("Digite o novo Nome de seu Personagem:\n");
+                    nome = scanner.nextLine();
+                    break;
+                case 2:
+                    System.out.print("Digite a nova Raça de seu Personagem:\n");
+                    raca = scanner.nextLine();
+                    break;
+                case 3:
+                    System.out.print("Digite a nova Classe de seu Personagem:\n");
+                    classe = scanner.nextLine();
+                    break;
+                case 4:
+                    System.out.print("Digite o novo Sexo de seu Personagem:\n");
+                    sexo = scanner.nextLine();
+                    break;
+                case 5:
+                    System.out.print("Digite o novo Nivel de seu Personagem:");
+                    nivel = scanner.nextInt();
+                    break;
+                case 6:
+                    System.out.print("Digite quantas Habilidades seu Personagem possui:\n");
+                    idHabilidade = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.print("Digite as novas habilidades de seu Personagem:\n");
+                    for (int i = 0; i < idHabilidade; i++) {
+                        habilidade = scanner.nextLine();
+                        System.out.println(habilidade + " " + i);
+                        habilidades.add(habilidade);
+                    }
+                    break;
+                case 0:
+                    mudanca = false;
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção inválida, tente novamente!");
+                    break;
+            }
+        } while (mudanca);
 
-        System.out.print("Digite a nova Classe de seu Personagem:");
-        classe = scanner.nextLine();
+        // System.out.println("Digite somente as caracteristicas que devem ser
+        // mudadas");
+        // System.out.print("Digite o novo Nome de seu Personagem:");
+        // nome = scanner.nextLine();
 
-        System.out.print("Digite o novo Sexo de seu Personagem:");
-        sexo = scanner.nextLine();
+        // System.out.print("Digite a nova Raça de seu Personagem:");
+        // raca = scanner.nextLine();
 
-        System.out.print("Digite o novo Nivel de seu Personagem:");
-        nivel = scanner.nextInt();
-        scanner.nextLine();
+        // System.out.print("Digite a nova Classe de seu Personagem:");
+        // classe = scanner.nextLine();
 
-        System.out.print("Digite as novas habilidades de seu Personagem:");
-        habilidades.add(idHabilidade++, scanner.nextLine());
-        nome = scanner.nextLine();
+        // System.out.print("Digite o novo Sexo de seu Personagem:");
+        // sexo = scanner.nextLine();
+
+        // System.out.print("Digite o novo Nivel de seu Personagem:");
+        // nivel = scanner.nextInt();
+        // scanner.nextLine();
+
+        // System.out.print("Digite quantas Habilidades seu Personagem possui:");
+        // idHabilidade = scanner.nextInt();
+        // System.out.print("Digite as novas habilidades de seu Personagem:");
+        // for (int i = 0; i < idHabilidade; i++) {
+        // habilidade = scanner.nextLine();
+        // habilidades.add(habilidade);
+        // }
         controller.editarPersonagem(id, nome, raca, classe, sexo, nivel, habilidades);
     }
 
