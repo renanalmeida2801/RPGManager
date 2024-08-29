@@ -15,6 +15,10 @@ public class PersonagemController {
         this.personagemDAO = new PersonagemDAOImpl();
     }
 
+    public PersonagemController(IPersonagemDAO person) {
+        this.personagemDAO = person;
+    }
+
     public void criarPersonagem(String nome, String raca, String classe, String sexo, int nivel,
             List<String> habilidades) {
         Personagem personagem = new Personagem();
@@ -49,6 +53,6 @@ public class PersonagemController {
     }
 
     public void gerarRelatorio(int id) {
-
+        personagemDAO.buscarPersonagem(id);
     }
 }
