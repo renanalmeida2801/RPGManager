@@ -26,15 +26,6 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
             .load();
     // configura o dotenv
 
-    public void funciona() {
-        String myVar = dotenv.get("MY_ENV_VAR");
-        if (myVar != null) {
-            System.out.println("Arquivo .env carregado com sucesso!");
-        } else {
-            System.out.println("Erro ao carregar o arquivo .env.");
-        }
-    }
-
     private final String url = dotenv.get("URL");
     private final String user = dotenv.get("USER");
     private final String password = dotenv.get("PASSWORD");
@@ -44,6 +35,23 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
     // Método para obter a conexão com o banco de dados
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, user, password);
+    }
+
+    public boolean encontrarId(int id) {
+        String query = "SELECT * FROM Personagem WHERE id = ?";
+        try (Connection conexao = getConnection();
+                PreparedStatement statement = conexao.prepareStatement(query)) {
+            statement.setInt(1, id);
+            ResultSet resultado = statement.executeQuery();
+            if (resultado.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+            // TODO: handle exception
+        }
     }
 
     // Método para converter a lista de habilidades em uma string
@@ -103,8 +111,6 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(procurado.getNome() + " " + procurado.getRaca() + " " + procurado.getClasse() + " "
-                + procurado.getSexo() + " " + procurado.getNivel() + " " + procurado.getHabilidades());
         return procurado;
     }
 

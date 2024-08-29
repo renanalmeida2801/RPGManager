@@ -17,4 +17,6 @@ public interface IPersonagemDAO {
 
     public List<Personagem> listarTodosPersonagens();
 
+    public boolean encontrarId(int id);
+
 }
