@@ -15,6 +15,10 @@ public class PersonagemController {
         this.personagemDAO = new PersonagemDAOImpl();
     }
 
+    public PersonagemController(IPersonagemDAO person) {
+        this.personagemDAO = person;
+    }
+
     public void criarPersonagem(String nome, String raca, String classe, String sexo, int nivel,
             List<String> habilidades) {
         Personagem personagem = new Personagem();
@@ -29,14 +33,7 @@ public class PersonagemController {
     }
 
     public void excluirPersonagem(int id) {
-        System.out.println("Tem certeza que deseja deletar este personagem? S/N");
-        String resposta = scanner.nextLine();
-        if (resposta.equals("S")) {
-            personagemDAO.deletarPersonagem(id);
-        } else if (resposta.equals("N")) {
-            System.out.println("Operacao Cancelada!");
-            return;
-        }
+        personagemDAO.deletarPersonagem(id);
     }
 
     public Personagem buscarPersonagem(int id) {
@@ -44,13 +41,22 @@ public class PersonagemController {
         return esperado;
     }
 
+    public List<Personagem> listarPersonagens() {
+        return personagemDAO.listarTodosPersonagens();
+    }
+
     public void editarPersonagem(int id, String nome, String raca, String classe, String sexo, int nivel,
             List<String> habilidades) {
 
-        // personagemDAO.atualizarPersonagem(id, nome, raca, classe, sexo, nivel, habilidades);
+        Personagem falso = new Personagem(nome, raca, classe, sexo, nivel, habilidades);
+        personagemDAO.atualizarPersonagem(id, falso);
     }
 
     public void gerarRelatorio(int id) {
+        personagemDAO.buscarPersonagem(id);
+    }
 
+    public boolean encontrarId(int id) {
+        return personagemDAO.encontrarId(id);
     }
 }

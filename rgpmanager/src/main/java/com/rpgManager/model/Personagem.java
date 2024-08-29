@@ -3,6 +3,7 @@ package com.rpgManager.model;
 import java.util.List;
 
 public class Personagem {
+    private int id;
     private String nome;
     private String raca;
     private String classe;
@@ -23,6 +24,13 @@ public class Personagem {
         this.habilidades = habilidades;
     }
 
+    public void setId(int novoId) {
+        this.id = novoId;
+    }
+
+    public int getId() {
+        return this.id;
+    }
 
     public void setNome(String novoNome) {
         this.nome = novoNome;

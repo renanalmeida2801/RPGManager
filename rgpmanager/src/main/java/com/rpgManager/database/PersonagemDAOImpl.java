@@ -11,21 +11,47 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.StringJoiner;
+
 import com.rpgManager.interfaces.IPersonagemDAO;
 import com.rpgManager.model.Personagem;
 import io.github.cdimascio.dotenv.Dotenv;
+import java.nio.file.Paths;
 
 public class PersonagemDAOImpl implements IPersonagemDAO {
 
-    Dotenv dotenv = Dotenv.load();
+    String caminho = Paths.get("").toAbsolutePath().toString();
+    Dotenv dotenv = Dotenv.configure()
+            .directory(caminho += "\\rgpmanager\\src")
+            .filename(".env")
+            .load();
+    // configura o dotenv
 
-    public final String url = dotenv.get("URL");
-    public final String user = dotenv.get("USER");
-    public final String password = dotenv.get("PASSWORD");
+    private final String url = dotenv.get("URL");
+    private final String user = dotenv.get("USER");
+    private final String password = dotenv.get("PASSWORD");
+
+    Personagem personagem;
 
     // Método para obter a conexão com o banco de dados
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, user, password);
+    }
+
+    public boolean encontrarId(int id) {
+        String query = "SELECT * FROM Personagem WHERE id = ?";
+        try (Connection conexao = getConnection();
+                PreparedStatement statement = conexao.prepareStatement(query)) {
+            statement.setInt(1, id);
+            ResultSet resultado = statement.executeQuery();
+            if (resultado.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+            // TODO: handle exception
+        }
     }
 
     // Método para converter a lista de habilidades em uma string
@@ -55,7 +81,6 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
             statement.setString(6, habilidadesString);
 
             statement.executeUpdate();
-            System.out.println("personagem: " + persona.getNome() + " foi adicionado");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,135 +111,84 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(procurado.getNome() + " " + procurado.getRaca() + " " + procurado.getClasse() + " "
-                + procurado.getSexo() + " " + procurado.getNivel() + " " + procurado.getHabilidades());
         return procurado;
     }
 
     @Override
-    public void atualizarPersonagem(int id) {
-        Scanner sc = new Scanner(System.in);
-        boolean changing = true;
-        while (changing) {
-            System.out.println("deseja mudar qual informação do seu personagem?");
-            String dataToBeChanged = sc.nextLine();
-            switch (dataToBeChanged) {
-                case "nome":
-                    System.out.println("escreva o novo nome do personagem");
-                    String info = sc.nextLine();
-                    String query = "UPDATE Personagem SET nome = ? WHERE id = ?";
-                    try (Connection conexao = getConnection();
-                            PreparedStatement statement = conexao.prepareStatement(query)) {
-                        statement.setString(1, info);
-                        statement.setInt(2, id);
-                        statement.executeUpdate();
-                        System.out.println("atualização do nome feito com sucesso" + info);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+    public void atualizarPersonagem(int id, Personagem falso) {
 
-                    break;
-                case "raca":
-                    System.out.println("escreva a nova raca do personagem");
-                    info = sc.nextLine();
-                    query = "UPDATE Personagem SET raca = ? WHERE id = ?";
-                    try (Connection conexao = getConnection();
-                            PreparedStatement statement = conexao.prepareStatement(query)) {
-                        statement.setString(1, info);
-                        statement.setInt(2, id);
-                        statement.executeUpdate();
-                        System.out.println("atualização da raca feita com sucesso");
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-
-                    break;
-                case "classe":
-                    System.out.println("escreva a nova classe do personagem");
-                    info = sc.nextLine();
-                    query = "UPDATE Personagem SET classe = ? WHERE id = ?";
-                    try (Connection conexao = getConnection();
-                            PreparedStatement statement = conexao.prepareStatement(query)) {
-                        statement.setString(1, info);
-                        statement.setInt(2, id);
-                        statement.executeUpdate();
-                        System.out.println("atualização da classe feita com sucesso");
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-
-                    break;
-                case "sexo":
-                    System.out.println("escreva o novo sexo do personagem");
-                    info = sc.nextLine();
-                    char sexInfo = info.charAt(0);
-                    query = "UPDATE Personagem SET sexo = ? WHERE id = ?";
-                    try (Connection conexao = getConnection();
-                            PreparedStatement statement = conexao.prepareStatement(query)) {
-                        statement.setString(1, String.valueOf(sexInfo));
-                        statement.setInt(2, id);
-                        statement.executeUpdate();
-                        System.out.println("atualização do sexo do personagem feito com sucesso");
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-
-                    break;
-
-                case "nivel":
-                    System.out.println("escreva o novo nivel do personagem");
-                    info = sc.nextLine();
-                    query = "UPDATE Personagem SET nivel = ? WHERE id = ?";
-                    try (Connection conexao = getConnection();
-                            PreparedStatement statement = conexao.prepareStatement(query)) {
-                        statement.setInt(1, Integer.parseInt(info));
-                        statement.setInt(2, id);
-                        statement.executeUpdate();
-                        System.out.println("atualização do nivel feita com sucesso");
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-
-                case "habilidades":
-                    System.out.println("escreva as novas habilidades do personagem");
-                    info = sc.nextLine();
-                    String selectHabilidades = "SELECT habilidades FROM Personagem WHERE id = ?";
-                    query = "UPDATE Personagem SET habilidades = ? WHERE id = ?";
-                    String habilidadeString = "";
-                    List<String> habilidadesList = null;
-                    try (Connection conexao = getConnection();
-                            PreparedStatement statement = conexao.prepareStatement(selectHabilidades)) {
-                        statement.setInt(1, id);
-                        ResultSet result = statement.executeQuery();
-                        if (result.next()) {
-                            habilidadeString = result.getString("habilidades");
-                            habilidadesList = new ArrayList<>(Arrays.asList(habilidadeString.split(",")));
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-
-                    try (Connection conexao = getConnection();
-                            PreparedStatement statement = conexao.prepareStatement(query)) {
-                        habilidadesList.add(info);
-                        habilidadeString = joinAllHabilities(habilidadesList);
-                        statement.setString(1, habilidadeString);
-                        statement.setInt(2, id);
-                        statement.executeUpdate();
-                        System.out.println("atualização da classe feita com sucesso");
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-
-                    break;
-                case "parar":
-                    changing = false;
-                    System.out.println("atualizações finalizadas");
-                    break;
+        if (!falso.getNome().equals("")) {
+            String query = "UPDATE Personagem SET nome = ? WHERE id = ?";
+            try (Connection conexao = getConnection();
+                    PreparedStatement statement = conexao.prepareStatement(query)) {
+                statement.setString(1, falso.getNome());
+                statement.setInt(2, id);
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
-        sc.close();
+
+        if (!falso.getRaca().equals("")) {
+            String query = "UPDATE Personagem SET raca = ? WHERE id = ?";
+            try (Connection conexao = getConnection();
+                    PreparedStatement statement = conexao.prepareStatement(query)) {
+                statement.setString(1, falso.getRaca());
+                statement.setInt(2, id);
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (!falso.getClasse().equals("")) {
+            String query = "UPDATE Personagem SET classe = ? WHERE id = ?";
+            try (Connection conexao = getConnection();
+                    PreparedStatement statement = conexao.prepareStatement(query)) {
+                statement.setString(1, falso.getClasse());
+                statement.setInt(2, id);
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (!falso.getSexo().equals("")) {
+            String query = "UPDATE Personagem SET sexo = ? WHERE id = ?";
+            try (Connection conexao = getConnection();
+                    PreparedStatement statement = conexao.prepareStatement(query)) {
+                statement.setString(1, falso.getSexo());
+                statement.setInt(2, id);
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (falso.getNivel() >= 0) {
+            String query = "UPDATE Personagem SET nivel = ? WHERE id = ?";
+            try (Connection conexao = getConnection();
+                    PreparedStatement statement = conexao.prepareStatement(query)) {
+                statement.setInt(1, falso.getNivel());
+                statement.setInt(2, id);
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (falso.getHabilidades() != null || !falso.getHabilidades().isEmpty()) {
+            String query = "UPDATE Personagem SET habilidades = ? WHERE id = ?";
+            try (Connection conexao = getConnection();
+                    PreparedStatement statement = conexao.prepareStatement(query)) {
+                String habilidadeString = joinAllHabilities(falso.getHabilidades());
+                statement.setString(1, habilidadeString);
+                statement.setInt(2, id);
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -240,7 +214,6 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
                 PreparedStatement statement = conexao.prepareStatement(deleteThis)) {
             statement.setInt(1, id);
             statement.executeUpdate();
-            System.out.println("O personagem " + nome + " foi deletado com sucesso!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -248,7 +221,8 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
     }
 
     @Override
-    public void listarTodosPersonagens() {
+    public List<Personagem> listarTodosPersonagens() {
+        List<Personagem> personagens = new ArrayList<>();
         try (Connection conn = getConnection();
                 Statement stmt = conn.createStatement()) {
 
@@ -256,17 +230,23 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
             ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
-                System.out.println("ID: " + rs.getInt("id"));
-                System.out.println("Nome: " + rs.getString("nome"));
-                System.out.println("Raça: " + rs.getString("raca"));
-                System.out.println("Classe: " + rs.getString("classe"));
-                System.out.println("Sexo: " + rs.getString("sexo"));
-                System.out.println("Nível: " + rs.getInt("nivel"));
-                System.out.println("Habilidades: " + rs.getString("habilidades"));
-                System.out.println("----------");
+                personagem = new Personagem();
+                personagem.setId(rs.getInt("id"));
+                personagem.setNome(rs.getString("nome"));
+                personagem.setRaca(rs.getString("raca"));
+                personagem.setClasse(rs.getString("classe"));
+                personagem.setSexo(rs.getString("sexo"));
+                personagem.setNivel(rs.getInt("nivel"));
+                String habildiadesString = rs.getString("habilidades");
+                List<String> habilidades = Arrays.asList(habildiadesString.split(","));
+                personagem.setHabilidade(habilidades);
+
+                personagens.add(personagem);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return personagens;
     }
 }

@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import com.rpgManager.controller.PersonagemController;
 import com.rpgManager.model.Personagem;
+import java.util.InputMismatchException;
 
 public class PersonagemView {
 
@@ -21,15 +22,25 @@ public class PersonagemView {
 
         do {
             System.out.println("Bem vindo ao RPG Manager!");
-            System.out.println("O que você deseja realizar ? Digite o número correspondente!");
+            System.out.println("O que você deseja realizar? Digite o número correspondente!");
             System.out.println("------------------------------------------------------------");
             System.out.println(
-                    "(1): Criar Personagem \n(2): Editar Personagem\n(3): Excluir Personagem\n(4): Listar Personagem\n(5): Gerar relatório\n(0): Sair");
+                    "(1): Criar Personagem \n(2): Editar Personagem\n(3): Excluir Personagem\n(4): Listar Personagens\n(5): Gerar relatório\n(0): Sair");
             System.out.println("------------------------------------------------------------");
-            System.out.print("digite um número:");
 
-            opcao = scanner.nextInt();
-            scanner.nextLine();
+            boolean entradaValida = false;
+
+            while (!entradaValida) {
+                System.out.print("Digite um número:");
+                try {
+                    opcao = scanner.nextInt();
+                    scanner.nextLine(); // Limpa o buffer do scanner
+                    entradaValida = true; // Se a leitura foi bem-sucedida, a entrada é válida
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrada inválida. Por favor, digite somente números.");
+                    scanner.nextLine(); // Limpa o buffer do scanner para evitar loop infinito
+                }
+            }
 
             switch (opcao) {
                 case 1:
@@ -42,7 +53,7 @@ public class PersonagemView {
                     excluirPersonagem();
                     break;
                 case 4:
-                    listarPersonagem();
+                    listarPersonagens();
                     break;
                 case 5:
                     gerarRelatorio();
@@ -62,6 +73,7 @@ public class PersonagemView {
     public void criarPersonagem() {
         String resposta = "";
         String sexo = "";
+        String habilidade;
         List<String> habilidades = new ArrayList<String>() {
 
         };
@@ -80,7 +92,7 @@ public class PersonagemView {
         do {
             System.out.println("Digite o sexo do seu personagem:");
             System.out.println("M: Masculino\nF: Feminino ");
-            sexo = scanner.nextLine();
+            sexo = scanner.nextLine().toUpperCase();
             resposta = sexo;
             if (!(sexo.equals("M")) && !(sexo.equals("F"))) {
                 System.out.println("Sexo inválido, tente novamente!");
@@ -91,72 +103,205 @@ public class PersonagemView {
         int nivel = scanner.nextInt();
         scanner.nextLine();
 
-        do {
-            System.out.println("Digite as habilidades do seu personagem: (digite 0 para finalizar)");
-            resposta = scanner.nextLine();
-            habilidades.add(idHabilidade++, resposta);
-        } while (!resposta.equals("0"));
+        System.out.print("Digite quantas Habilidades seu Personagem possui:\n");
+        idHabilidade = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Digite as novas habilidades de seu Personagem:\n");
+        for (int i = 0; i < idHabilidade; i++) {
+            habilidade = scanner.nextLine();
+            habilidades.add(habilidade);
+        }
         controller.criarPersonagem(nome, raca, classe, sexo, nivel, habilidades);
+        limparTela();
         System.out.println("Personagem Criado com Sucesso!");
     }
 
     public void editarPersonagem() {
         int idHabilidade = 0;
-        String nome;
-        String raca;
-        String classe;
-        String sexo;
-        int nivel;
+        String habilidade;
+        String nome = "";
+        String raca = "";
+        String classe = "";
+        String sexo = "";
+        int nivel = -1;
         List<String> habilidades = new ArrayList<String>();
+        boolean mudanca = true;
 
-        System.out.print("Digite o ID do personagem que deseja editar:");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+        listarPersonagens();
 
-        System.out.print("Digite o novo Nome de seu Personagem:");
-        nome = scanner.nextLine();
+        int id = -1;
+        boolean entradaValida = false;
 
-        System.out.print("Digite a nova Raça de seu Personagem:");
-        raca = scanner.nextLine();
+        // Validação de entrada para o ID do personagem
+        while (!entradaValida) {
+            System.out.print("Digite o ID do personagem que deseja editar:");
+            try {
+                id = scanner.nextInt();
+                scanner.nextLine(); // Limpa o buffer
+                entradaValida = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, digite um número válido para o ID.");
+                scanner.nextLine(); // Limpa o buffer para evitar loop infinito
+            }
+        }
 
-        System.out.print("Digite a nova Classe de seu Personagem:");
-        classe = scanner.nextLine();
+        encontrarId(id);
 
-        System.out.print("Digite o novo Sexo de seu Personagem:");
-        sexo = scanner.nextLine();
+        do {
+            System.out.println("O que você deseja Editar? Digite o número correspondente!");
+            System.out.println("------------------------------------------------------------");
+            System.out.println(
+                    "(1): Nome do Personagem \n(2): Raça do Personagem\n(3): Classe do Personagem\n(4): Sexo do Personagem\n(5): Nível do Personagem\n(6): Habilidades do Personagem\n(0): Terminar edição");
+            System.out.println("------------------------------------------------------------");
 
-        System.out.print("Digite o novo Nivel de seu Personagem:");
-        nivel = scanner.nextInt();
-        scanner.nextLine();
+            int opcao = -1;
+            entradaValida = false;
 
-        System.out.print("Digite as novas habilidades de seu Personagem:");
-        habilidades.add(idHabilidade++, scanner.nextLine());
-        nome = scanner.nextLine();
+            // Validação de entrada para a opção do menu
+            while (!entradaValida) {
+                System.out.print("Digite um número:");
+                try {
+                    opcao = scanner.nextInt();
+                    scanner.nextLine(); // Limpa o buffer
+                    entradaValida = true;
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrada inválida. Por favor, digite somente números.");
+                    scanner.nextLine(); // Limpa o buffer para evitar loop infinito
+                }
+            }
+
+            switch (opcao) {
+                case 1:
+                    System.out.print("Digite o novo Nome de seu Personagem:\n");
+                    nome = scanner.nextLine();
+                    break;
+                case 2:
+                    System.out.print("Digite a nova Raça de seu Personagem:\n");
+                    raca = scanner.nextLine();
+                    break;
+                case 3:
+                    System.out.print("Digite a nova Classe de seu Personagem:\n");
+                    classe = scanner.nextLine();
+                    break;
+                case 4:
+                    do {
+                        System.out.println("Digite o sexo do seu personagem:");
+                        System.out.println("M: Masculino\nF: Feminino ");
+                        sexo = scanner.nextLine().toUpperCase();
+                        if (!(sexo.equals("M")) && !(sexo.equals("F"))) {
+                            System.out.println("Sexo inválido, tente novamente!");
+                        }
+                    } while (!sexo.equals("M") && !sexo.equals("F"));
+                    break;
+                case 5:
+                    entradaValida = false;
+                    while (!entradaValida) {
+                        System.out.print("Digite o novo Nível de seu Personagem:");
+                        try {
+                            nivel = scanner.nextInt();
+                            scanner.nextLine(); // Limpa o buffer
+                            entradaValida = true;
+                        } catch (InputMismatchException e) {
+                            System.out.println("Entrada inválida. Por favor, digite um número válido para o nível.");
+                            scanner.nextLine(); // Limpa o buffer para evitar loop infinito
+                        }
+                    }
+                    break;
+                case 6:
+                    entradaValida = false;
+                    while (!entradaValida) {
+                        System.out.print("Digite quantas Habilidades seu Personagem possui:\n");
+                        try {
+                            idHabilidade = scanner.nextInt();
+                            scanner.nextLine(); // Limpa o buffer
+                            entradaValida = true;
+                        } catch (InputMismatchException e) {
+                            System.out.println("Entrada inválida. Por favor, digite um número válido.");
+                            scanner.nextLine(); // Limpa o buffer para evitar loop infinito
+                        }
+                    }
+                    System.out.print("Digite as novas habilidades de seu Personagem:\n");
+                    for (int i = 0; i < idHabilidade; i++) {
+                        habilidade = scanner.nextLine();
+                        habilidades.add(habilidade);
+                    }
+                    break;
+                case 0:
+                    mudanca = false;
+                    limparTela();
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção inválida, tente novamente!");
+                    break;
+            }
+        } while (mudanca);
+
         controller.editarPersonagem(id, nome, raca, classe, sexo, nivel, habilidades);
     }
 
     public void excluirPersonagem() {
-        System.out.print("Digite o ID do personagem que deseja excluir:");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-        controller.buscarPersonagem(id);
+        listarPersonagens();
 
-        
-        controller.excluirPersonagem(id);
+        int id = -1;
+        boolean entradaValida = false;
+
+        // Validação de entrada para o ID do personagem
+        while (!entradaValida) {
+            System.out.println("Digite o ID do personagem que deseja excluir --- (digite 0 para Cancelar)");
+            try {
+                id = scanner.nextInt();
+                scanner.nextLine(); // Limpa o buffer
+                entradaValida = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, digite um número válido para o ID.");
+                scanner.nextLine(); // Limpa o buffer para evitar loop infinito
+            }
+        }
+
+        if (id == 0) {
+            limparTela();
+            System.out.println("Operação cancelada!");
+            return;
+        }
+        encontrarId(id);
+
+        System.out.println("Tem certeza que deseja deletar este personagem? S/N");
+        String confirmacao = scanner.nextLine().toUpperCase();
+
+        // Validação de entrada para a confirmação
+        while (!confirmacao.equals("S") && !confirmacao.equals("N")) {
+            System.out.println("Opção inválida, digite somente S/N");
+            confirmacao = scanner.nextLine().toUpperCase();
+        }
+
+        if (confirmacao.equals("S")) {
+            controller.excluirPersonagem(id);
+            limparTela();
+            System.out.println("Personagem excluído com sucesso!");
+        } else if (confirmacao.equals("N")) {
+            limparTela();
+            System.out.println("Operação cancelada!");
+        } else {
+            limparTela();
+            System.out.println("ERRO na exclusão. Tente novamente");
+        }
     }
 
-    public void listarPersonagem() {
-        System.out.print("Digite o ID do personagem que deseja encontrar:");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-        Personagem persona = controller.buscarPersonagem(id);
-        System.out.println("Nome: " + persona.getNome());
-        System.out.println("Raça: " + persona.getRaca());
-        System.out.println("Classe: " + persona.getClasse());
-        System.out.println("Sexo: " + persona.getSexo());
-        System.out.println("Nivel: " + persona.getNivel());
-        System.out.println("Habilidades: " + persona.getHabilidades());
+    public void listarPersonagens() {
+        List<Personagem> personagens = controller.listarPersonagens();
 
+        for (Personagem p : personagens) {
+            System.out.println("ID: " + p.getId());
+            System.out.println("Nome: " + p.getNome());
+            System.out.println("Raça: " + p.getRaca());
+            System.out.println("Classe: " + p.getClasse());
+            System.out.println("Sexo: " + p.getSexo());
+            System.out.println("Nível: " + p.getNivel());
+            System.out.println("Habilidades: " + p.getHabilidades());
+            System.out.println("--------------------------------");
+
+        }
     }
 
     public void gerarRelatorio() {
@@ -165,4 +310,24 @@ public class PersonagemView {
         scanner.nextLine();
         controller.gerarRelatorio(id);
     }
+
+    public static void limparTela() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                new ProcessBuilder("clear").inheritIO().start().waitFor();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void encontrarId(int id) {
+        while (!controller.encontrarId(id)) {
+            System.out.println("Digite um id valido:");
+            id = scanner.nextInt();
+        }
+    }
+
 }
