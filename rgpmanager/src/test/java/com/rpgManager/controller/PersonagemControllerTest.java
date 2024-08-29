@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -119,5 +120,12 @@ public class PersonagemControllerTest {
 
         // verificando
         verify(personagemDao, times(1)).buscarPersonagem(1);
+    }
+
+    @Test
+    void testarCriarPersonagemComDadosInvalidos() {
+        doThrow(IllegalArgumentException.class).when(personagemDao).salvarPersonagem(any(Personagem.class));
+
+        
     }
 }
