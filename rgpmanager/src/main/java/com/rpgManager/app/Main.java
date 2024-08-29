@@ -20,6 +20,11 @@ public class Main {
 
         ArrayList<String> lista = new ArrayList<>();
 
+        lista.add("ROUBAR");
+        lista.add("FURTAR");
+        lista.add("EMGABELAR");
+        lista.add("SAFADEZAS");
+
         relatorio.gerarRelatorio(new Personagem("Kratos", "Humano", "Guerreiro", "sim", 20, lista));
         // PersonagemDAOImpl banco = new PersonagemDAOImpl();
 
