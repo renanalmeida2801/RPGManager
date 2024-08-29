@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import com.rpgManager.controller.PersonagemController;
 import com.rpgManager.model.Personagem;
+import java.util.InputMismatchException;
 
 public class PersonagemView {
 
@@ -21,15 +22,25 @@ public class PersonagemView {
 
         do {
             System.out.println("Bem vindo ao RPG Manager!");
-            System.out.println("O que você deseja realizar ? Digite o número correspondente!");
+            System.out.println("O que você deseja realizar? Digite o número correspondente!");
             System.out.println("------------------------------------------------------------");
             System.out.println(
                     "(1): Criar Personagem \n(2): Editar Personagem\n(3): Excluir Personagem\n(4): Listar Personagens\n(5): Gerar relatório\n(0): Sair");
             System.out.println("------------------------------------------------------------");
-            System.out.print("digite um número:");
 
-            opcao = scanner.nextInt();
-            scanner.nextLine();
+            boolean entradaValida = false;
+
+            while (!entradaValida) {
+                System.out.print("Digite um número:");
+                try {
+                    opcao = scanner.nextInt();
+                    scanner.nextLine(); // Limpa o buffer do scanner
+                    entradaValida = true; // Se a leitura foi bem-sucedida, a entrada é válida
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrada inválida. Por favor, digite somente números.");
+                    scanner.nextLine(); // Limpa o buffer do scanner para evitar loop infinito
+                }
+            }
 
             switch (opcao) {
                 case 1:
@@ -62,6 +73,7 @@ public class PersonagemView {
     public void criarPersonagem() {
         String resposta = "";
         String sexo = "";
+        String habilidade;
         List<String> habilidades = new ArrayList<String>() {
 
         };
@@ -80,7 +92,7 @@ public class PersonagemView {
         do {
             System.out.println("Digite o sexo do seu personagem:");
             System.out.println("M: Masculino\nF: Feminino ");
-            sexo = scanner.nextLine();
+            sexo = scanner.nextLine().toUpperCase();
             resposta = sexo;
             if (!(sexo.equals("M")) && !(sexo.equals("F"))) {
                 System.out.println("Sexo inválido, tente novamente!");
@@ -91,13 +103,14 @@ public class PersonagemView {
         int nivel = scanner.nextInt();
         scanner.nextLine();
 
-        do {
-            System.out.println("Digite as habilidades do seu personagem: (digite 0 para finalizar)");
-            resposta = scanner.nextLine();
-            if (!resposta.equals("0")) {
-                habilidades.add(idHabilidade++, resposta);
-            }
-        } while (!resposta.equals("0"));
+        System.out.print("Digite quantas Habilidades seu Personagem possui:\n");
+        idHabilidade = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Digite as novas habilidades de seu Personagem:\n");
+        for (int i = 0; i < idHabilidade; i++) {
+            habilidade = scanner.nextLine();
+            habilidades.add(habilidade);
+        }
         controller.criarPersonagem(nome, raca, classe, sexo, nivel, habilidades);
         limparTela();
         System.out.println("Personagem Criado com Sucesso!");
@@ -115,19 +128,47 @@ public class PersonagemView {
         boolean mudanca = true;
 
         listarPersonagens();
-        System.out.print("Digite o ID do personagem que deseja editar:");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+
+        int id = -1;
+        boolean entradaValida = false;
+
+        // Validação de entrada para o ID do personagem
+        while (!entradaValida) {
+            System.out.print("Digite o ID do personagem que deseja editar:");
+            try {
+                id = scanner.nextInt();
+                scanner.nextLine(); // Limpa o buffer
+                entradaValida = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, digite um número válido para o ID.");
+                scanner.nextLine(); // Limpa o buffer para evitar loop infinito
+            }
+        }
+
+        encontrarId(id);
+
         do {
-            System.out.println("O que você deseja Editar ? Digite o número correspondente!");
+            System.out.println("O que você deseja Editar? Digite o número correspondente!");
             System.out.println("------------------------------------------------------------");
             System.out.println(
-                    "(1): Nome do Personagem \n(2): Raca do Personagem\n(3): Classe do Personagem\n(4): Sexo do Personagem\n(5): Nivel do Personagem\n(6): Habilidades do Personagem\n(0): Terminar edicao");
+                    "(1): Nome do Personagem \n(2): Raça do Personagem\n(3): Classe do Personagem\n(4): Sexo do Personagem\n(5): Nível do Personagem\n(6): Habilidades do Personagem\n(0): Terminar edição");
             System.out.println("------------------------------------------------------------");
-            System.out.print("digite um número:");
 
-            int opcao = scanner.nextInt();
-            scanner.nextLine();
+            int opcao = -1;
+            entradaValida = false;
+
+            // Validação de entrada para a opção do menu
+            while (!entradaValida) {
+                System.out.print("Digite um número:");
+                try {
+                    opcao = scanner.nextInt();
+                    scanner.nextLine(); // Limpa o buffer
+                    entradaValida = true;
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrada inválida. Por favor, digite somente números.");
+                    scanner.nextLine(); // Limpa o buffer para evitar loop infinito
+                }
+            }
 
             switch (opcao) {
                 case 1:
@@ -143,21 +184,45 @@ public class PersonagemView {
                     classe = scanner.nextLine();
                     break;
                 case 4:
-                    System.out.print("Digite o novo Sexo de seu Personagem:\n");
-                    sexo = scanner.nextLine();
+                    do {
+                        System.out.println("Digite o sexo do seu personagem:");
+                        System.out.println("M: Masculino\nF: Feminino ");
+                        sexo = scanner.nextLine().toUpperCase();
+                        if (!(sexo.equals("M")) && !(sexo.equals("F"))) {
+                            System.out.println("Sexo inválido, tente novamente!");
+                        }
+                    } while (!sexo.equals("M") && !sexo.equals("F"));
                     break;
                 case 5:
-                    System.out.print("Digite o novo Nivel de seu Personagem:");
-                    nivel = scanner.nextInt();
+                    entradaValida = false;
+                    while (!entradaValida) {
+                        System.out.print("Digite o novo Nível de seu Personagem:");
+                        try {
+                            nivel = scanner.nextInt();
+                            scanner.nextLine(); // Limpa o buffer
+                            entradaValida = true;
+                        } catch (InputMismatchException e) {
+                            System.out.println("Entrada inválida. Por favor, digite um número válido para o nível.");
+                            scanner.nextLine(); // Limpa o buffer para evitar loop infinito
+                        }
+                    }
                     break;
                 case 6:
-                    System.out.print("Digite quantas Habilidades seu Personagem possui:\n");
-                    idHabilidade = scanner.nextInt();
-                    scanner.nextLine();
+                    entradaValida = false;
+                    while (!entradaValida) {
+                        System.out.print("Digite quantas Habilidades seu Personagem possui:\n");
+                        try {
+                            idHabilidade = scanner.nextInt();
+                            scanner.nextLine(); // Limpa o buffer
+                            entradaValida = true;
+                        } catch (InputMismatchException e) {
+                            System.out.println("Entrada inválida. Por favor, digite um número válido.");
+                            scanner.nextLine(); // Limpa o buffer para evitar loop infinito
+                        }
+                    }
                     System.out.print("Digite as novas habilidades de seu Personagem:\n");
                     for (int i = 0; i < idHabilidade; i++) {
                         habilidade = scanner.nextLine();
-                        System.out.println(habilidade + " " + i);
                         habilidades.add(habilidade);
                     }
                     break;
@@ -172,50 +237,48 @@ public class PersonagemView {
             }
         } while (mudanca);
 
-        // System.out.println("Digite somente as caracteristicas que devem ser
-        // mudadas");
-        // System.out.print("Digite o novo Nome de seu Personagem:");
-        // nome = scanner.nextLine();
-
-        // System.out.print("Digite a nova Raça de seu Personagem:");
-        // raca = scanner.nextLine();
-
-        // System.out.print("Digite a nova Classe de seu Personagem:");
-        // classe = scanner.nextLine();
-
-        // System.out.print("Digite o novo Sexo de seu Personagem:");
-        // sexo = scanner.nextLine();
-
-        // System.out.print("Digite o novo Nivel de seu Personagem:");
-        // nivel = scanner.nextInt();
-        // scanner.nextLine();
-
-        // System.out.print("Digite quantas Habilidades seu Personagem possui:");
-        // idHabilidade = scanner.nextInt();
-        // System.out.print("Digite as novas habilidades de seu Personagem:");
-        // for (int i = 0; i < idHabilidade; i++) {
-        // habilidade = scanner.nextLine();
-        // habilidades.add(habilidade);
-        // }
         controller.editarPersonagem(id, nome, raca, classe, sexo, nivel, habilidades);
     }
 
     public void excluirPersonagem() {
         listarPersonagens();
-        System.out.println("Digite o ID do personagem que deseja excluir --- (digite 0 para Cancelar)");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+
+        int id = -1;
+        boolean entradaValida = false;
+
+        // Validação de entrada para o ID do personagem
+        while (!entradaValida) {
+            System.out.println("Digite o ID do personagem que deseja excluir --- (digite 0 para Cancelar)");
+            try {
+                id = scanner.nextInt();
+                scanner.nextLine(); // Limpa o buffer
+                entradaValida = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, digite um número válido para o ID.");
+                scanner.nextLine(); // Limpa o buffer para evitar loop infinito
+            }
+        }
+
         if (id == 0) {
             limparTela();
             System.out.println("Operação cancelada!");
             return;
         }
+        encontrarId(id);
+
         System.out.println("Tem certeza que deseja deletar este personagem? S/N");
-        String confirmacao = scanner.nextLine();
+        String confirmacao = scanner.nextLine().toUpperCase();
+
+        // Validação de entrada para a confirmação
+        while (!confirmacao.equals("S") && !confirmacao.equals("N")) {
+            System.out.println("Opção inválida, digite somente S/N");
+            confirmacao = scanner.nextLine().toUpperCase();
+        }
+
         if (confirmacao.equals("S")) {
             controller.excluirPersonagem(id);
             limparTela();
-            System.out.println("Personagem Excluido com sucesso!");
+            System.out.println("Personagem excluído com sucesso!");
         } else if (confirmacao.equals("N")) {
             limparTela();
             System.out.println("Operação cancelada!");
@@ -257,6 +320,13 @@ public class PersonagemView {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void encontrarId(int id) {
+        while (!controller.encontrarId(id)) {
+            System.out.println("Digite um id valido:");
+            id = scanner.nextInt();
         }
     }
 

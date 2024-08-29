@@ -55,4 +55,8 @@ public class PersonagemController {
     public void gerarRelatorio(int id) {
         personagemDAO.buscarPersonagem(id);
     }
+
+    public boolean encontrarId(int id) {
+        return personagemDAO.encontrarId(id);
+    }
 }
