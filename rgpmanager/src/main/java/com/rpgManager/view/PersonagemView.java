@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.rpgManager.controller.PersonagemController;
+import com.rpgManager.controller.RelatorioController;
 import com.rpgManager.model.Personagem;
 import java.util.InputMismatchException;
 
@@ -289,6 +290,8 @@ public class PersonagemView {
     }
 
     public void listarPersonagens() {
+        limparTela();
+        
         List<Personagem> personagens = controller.listarPersonagens();
 
         for (Personagem p : personagens) {
@@ -305,10 +308,10 @@ public class PersonagemView {
     }
 
     public void gerarRelatorio() {
-        System.out.print("Digite o ID do personagem que deseja emitir o relatório: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-        controller.gerarRelatorio(id);
+        listarPersonagens();
+        controller.gerarRelatorio();
+        limparTela();
+        System.out.println("Relatorio criado com sucesso!");
     }
 
     public static void limparTela() {

@@ -226,7 +226,7 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
         try (Connection conn = getConnection();
                 Statement stmt = conn.createStatement()) {
 
-            String query = "SELECT * FROM Personagem;";
+            String query = "SELECT * FROM Personagem  order by id;";
             ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {

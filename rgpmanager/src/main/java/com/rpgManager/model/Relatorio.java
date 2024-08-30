@@ -1,7 +1,6 @@
 package com.rpgManager.model;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -96,7 +95,7 @@ public class Relatorio {
             }
     }
 
-    public void gerarRelatorio(ArrayList<Personagem> personagem){
+    public void gerarRelatorio(List<Personagem> personagem){
         for (Personagem p : personagem) gerarRelatorio(p);
     }
 }

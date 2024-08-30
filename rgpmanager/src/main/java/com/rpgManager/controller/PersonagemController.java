@@ -52,8 +52,9 @@ public class PersonagemController {
         personagemDAO.atualizarPersonagem(id, falso);
     }
 
-    public void gerarRelatorio(int id) {
-        personagemDAO.buscarPersonagem(id);
+    public void gerarRelatorio() {
+        RelatorioController relatorioController = new RelatorioController();
+        relatorioController.gerarRelatorio();
     }
 
     public boolean encontrarId(int id) {
