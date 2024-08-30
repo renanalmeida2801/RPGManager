@@ -21,6 +21,17 @@ public class PersonagemController {
 
     public void criarPersonagem(String nome, String raca, String classe, String sexo, int nivel,
             List<String> habilidades) {
+
+        if (nome == null || nome.isEmpty() || raca == null || raca.isEmpty() || classe == null || classe.isEmpty()
+                || sexo == null || sexo.isEmpty()) {
+
+            throw new IllegalArgumentException("Os campos não podem estar em branco");
+        }
+
+        if (nivel < 0) {
+            throw new IllegalArgumentException("Nível não pode ser negativo");
+        }
+
         Personagem personagem = new Personagem();
         personagem.setNome(nome);
         personagem.setRaca(raca);
