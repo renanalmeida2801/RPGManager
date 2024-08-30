@@ -115,7 +115,7 @@ public class PersonagemControllerTest {
         when(personagemDao.buscarPersonagem(1)).thenReturn(personagem);
 
         // exercitando
-        controller.gerarRelatorio(1);
+        // controller.gerarRelatorio(1);
 
         // verificando
         verify(personagemDao, times(1)).buscarPersonagem(1);

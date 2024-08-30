@@ -177,7 +177,7 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
             }
         }
 
-        if (falso.getHabilidades() != null || !falso.getHabilidades().isEmpty()) {
+        if (falso.getHabilidades() == null || !falso.getHabilidades().isEmpty()) {
             String query = "UPDATE Personagem SET habilidades = ? WHERE id = ?";
             try (Connection conexao = getConnection();
                     PreparedStatement statement = conexao.prepareStatement(query)) {
