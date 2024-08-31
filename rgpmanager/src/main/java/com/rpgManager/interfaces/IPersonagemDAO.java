@@ -3,7 +3,6 @@ package com.rpgManager.interfaces;
 import java.util.List;
 
 import com.rpgManager.model.Personagem;
-import java.util.*;
 
 public interface IPersonagemDAO {
 

@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 import java.util.StringJoiner;
 
 import com.rpgManager.interfaces.IPersonagemDAO;
@@ -194,18 +193,13 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
     @Override
     public void deletarPersonagem(int id) {
         String deleteThis = "DELETE FROM Personagem WHERE id = ?";
-        String nome = "";
+
         String query = "SELECT nome FROM Personagem WHERE id = ?";
         try (Connection conexao = getConnection();
                 PreparedStatement statement = conexao.prepareStatement(query)) {
 
             statement.setInt(1, id);
-            ResultSet result = statement.executeQuery();
 
-            if (result.next()) {
-                nome = result.getString("nome");
-
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

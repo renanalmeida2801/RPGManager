@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.rpgManager.controller.PersonagemController;
-import com.rpgManager.controller.RelatorioController;
 import com.rpgManager.model.Personagem;
 import java.util.InputMismatchException;
 
@@ -291,7 +290,7 @@ public class PersonagemView {
 
     public void listarPersonagens() {
         limparTela();
-        
+
         List<Personagem> personagens = controller.listarPersonagens();
 
         for (Personagem p : personagens) {
