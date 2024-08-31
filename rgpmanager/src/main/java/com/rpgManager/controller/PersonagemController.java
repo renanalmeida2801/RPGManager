@@ -44,10 +44,18 @@ public class PersonagemController {
     }
 
     public void excluirPersonagem(int id) {
+        Personagem personagem = personagemDAO.buscarPersonagem(id);
+        if (personagem == null) {
+            throw new IllegalArgumentException("Personagem não encontrado.");
+        }
         personagemDAO.deletarPersonagem(id);
     }
 
     public Personagem buscarPersonagem(int id) {
+        if (id == 0) {
+            throw new IllegalArgumentException("Id não pode ser vazio");
+        }
+
         Personagem esperado = personagemDAO.buscarPersonagem(id);
         return esperado;
     }
@@ -58,6 +66,30 @@ public class PersonagemController {
 
     public void editarPersonagem(int id, String nome, String raca, String classe, String sexo, int nivel,
             List<String> habilidades) {
+
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome inválido");
+        }
+
+        if (raca == null || raca.trim().isEmpty()) {
+            throw new IllegalArgumentException("Raça inválida");
+        }
+
+        if (classe == null || classe.trim().isEmpty()) {
+            throw new IllegalArgumentException("Classe inválida");
+        }
+
+        if (sexo == null || raca.trim().isEmpty()) {
+            throw new IllegalArgumentException("Sexo inválido");
+        }
+        if (habilidades == null || habilidades.isEmpty()) {
+            throw new IllegalArgumentException("Habilidades inválidas");
+        }
+
+        Personagem personagemExistente = personagemDAO.buscarPersonagem(id);
+        if (personagemExistente == null) {
+            throw new IllegalArgumentException("Personagem não encontrado");
+        }
 
         Personagem falso = new Personagem(nome, raca, classe, sexo, nivel, habilidades);
         personagemDAO.atualizarPersonagem(id, falso);
