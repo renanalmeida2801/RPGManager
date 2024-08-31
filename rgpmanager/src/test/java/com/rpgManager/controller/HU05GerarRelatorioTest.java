@@ -19,7 +19,7 @@ import java.util.List;
 import java.nio.file.Paths;
 
 public class HU05GerarRelatorioTest {
-
+    @Mock
     private PersonagemController personagemController;
 
     @Mock

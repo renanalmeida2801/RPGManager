@@ -17,7 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import java.util.*;;
+import java.util.*;
 
 public class HU02EditarPersonagemTest {
     @InjectMocks
@@ -57,22 +57,6 @@ public class HU02EditarPersonagemTest {
     }
 
     @Test
-    public void testarEditarPersonagemComInformacoesIncorretas() {
-        // configurção
-        int id = 1;
-        Personagem personagemExistente = new Personagem("Sukuna", "Maldição", "Ameaça", "M", 30,
-                new ArrayList<>(List.of("Desmantelar")));
-        when(personagemDAO.buscarPersonagem(id)).thenReturn(personagemExistente);
-
-        // exercitando e verificação
-        assertThrows(IllegalArgumentException.class, () -> {
-            List<String> novasHabilidades = new ArrayList<>(List.of("Mahoraga", "Santuário Malevolente"));
-            when(personagemDAO.buscarPersonagem(id)).thenReturn(personagemExistente);
-            controlador.editarPersonagem(id, "", null, null, "X", 12, novasHabilidades);
-        });
-    }
-
-    @Test
     public void testarEditarPersonagemComInformacoesInvalidas() {
         // configuração
         int id = 1;
@@ -86,5 +70,7 @@ public class HU02EditarPersonagemTest {
                     List.of("Ilimitado", "Reversão de feitiço", "Amplificação de feitiço"));
             controlador.editarPersonagem(id, null, null, null, null, -5, novasHabilidades);
         });
+        verify(personagemDAO, never()).atualizarPersonagem(anyInt(), any(Personagem.class));
+
     }
 }

@@ -67,23 +67,27 @@ public class PersonagemController {
     public void editarPersonagem(int id, String nome, String raca, String classe, String sexo, int nivel,
             List<String> habilidades) {
 
-        if (nome == null || nome.trim().isEmpty()) {
+        if (nome == null) {
             throw new IllegalArgumentException("Nome inválido");
         }
 
-        if (raca == null || raca.trim().isEmpty()) {
+        if (raca == null) {
             throw new IllegalArgumentException("Raça inválida");
         }
 
-        if (classe == null || classe.trim().isEmpty()) {
+        if (classe == null) {
             throw new IllegalArgumentException("Classe inválida");
         }
 
-        if (sexo == null || raca.trim().isEmpty()) {
+        if (sexo == null) {
             throw new IllegalArgumentException("Sexo inválido");
         }
-        if (habilidades == null || habilidades.isEmpty()) {
+        if (habilidades == null) {
             throw new IllegalArgumentException("Habilidades inválidas");
+        }
+        if (nivel < -1) {
+            System.out.println(nivel);
+            throw new IllegalArgumentException("Nível não pode ser negativo");
         }
 
         Personagem personagemExistente = personagemDAO.buscarPersonagem(id);

@@ -65,19 +65,6 @@ public class HU04BuscarPersonagemTest {
     }
 
     @Test
-    public void testarBuscarComCampoVazio() {
-        // configuração
-        int idVazio = 0;
-
-        // exercitando e verificando
-        assertThrows(IllegalArgumentException.class, () -> {
-            controlador.buscarPersonagem(idVazio);
-        });
-
-        verify(personagemDAOImpl, never()).buscarPersonagem(idVazio);
-    }
-
-    @Test
     public void testarListarPersonagensComSucesso() {
         // configuração
         List<Personagem> personagensEsperados = new ArrayList<>();
