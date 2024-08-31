@@ -7,27 +7,33 @@ import com.rpgManager.model.Relatorio;
 import com.rpgManager.view.RelatorioView;
 
 public class RelatorioController {
-    
+
     private PersonagemController personagemController;
     private Relatorio relatorio;
 
-    public RelatorioController(){
-        personagemController = new PersonagemController();
-        relatorio = new Relatorio();
+    public RelatorioController() {
+        this.personagemController = new PersonagemController();
+        this.relatorio = new Relatorio();
     }
-    
-    public void gerarRelatorio(){
+
+    // Construtor personalizado para injeção de dependências
+    public RelatorioController(PersonagemController personagemController, Relatorio relatorio) {
+        this.personagemController = personagemController;
+        this.relatorio = relatorio;
+    }
+
+    public void gerarRelatorio() {
         int id = solicitarId();
-        if(id == 0){
-            List<Personagem> personagens =  personagemController.listarPersonagens();
-            relatorio.gerarRelatorio(personagens);
-        }else{
-            Personagem personagem = personagemController.buscarPersonagem(id);
-            relatorio.gerarRelatorio(personagem);
+        if (id == 0) {
+            List<Personagem> personagens = this.personagemController.listarPersonagens();
+            this.relatorio.gerarRelatorio(personagens);
+        } else {
+            Personagem personagem = this.personagemController.buscarPersonagem(id);
+            this.relatorio.gerarRelatorio(personagem);
         }
     }
 
-    public int solicitarId(){
+    public int solicitarId() {
         RelatorioView relatorioView = new RelatorioView();
         int id = relatorioView.solicitarId();
         return id;
