@@ -177,7 +177,7 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
             }
         }
 
-        if (falso.getHabilidades() != null || !falso.getHabilidades().isEmpty()) {
+        if (falso.getHabilidades() == null || !falso.getHabilidades().isEmpty()) {
             String query = "UPDATE Personagem SET habilidades = ? WHERE id = ?";
             try (Connection conexao = getConnection();
                     PreparedStatement statement = conexao.prepareStatement(query)) {
@@ -226,7 +226,7 @@ public class PersonagemDAOImpl implements IPersonagemDAO {
         try (Connection conn = getConnection();
                 Statement stmt = conn.createStatement()) {
 
-            String query = "SELECT * FROM Personagem;";
+            String query = "SELECT * FROM Personagem  order by id;";
             ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
